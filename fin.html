@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Merci !</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    img {
+      width: 100%;
+      max-width: 50000px;
+      height: auto;
+    }
+    .message {
+      margin-top: 300px;
+      font-size: 12px;
+      color: #020e04;
+      margin-bottom: 100px;
+    }
+    #resetButton {
+      margin-top: 20px;
+      max-width: 100px;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+  </style>
+</head>
+<body onload="startPage()">
+  <div class="image-container">
+    <img id="randomImage" src="" alt="Image aléatoire">
+  </div>
+  <div class="message" id="message">
+    Merci pour votre patience. Nous avons encore besoin de quelques informations. Recommencez ou veuillez attendre votre tour. <br>
+    Vous êtes le numéro : <span id="visitorNumber">...</span>
+  </div>
+
+  <!-- Image cliquable pour redémarrer -->
+  <img src="bouton.png" alt="Recommencer" width="150" id="resetButton" onclick="resetPage()" style="cursor:pointer;">
+
+  <script>
+    const imageList = [
+      "1.png", "2.png", "3.png", "4.png", "5.png",
+      "6.png", "7.png", "8.png", "9.png", "10.png",
+      "11.png", "12.png", "13.png", "14.png", "15.png",
+      "16.png", "17.png", "18.png", "19.png", "20.png",
+      "21.png", "22.png", "23.png", "24.png", "25.png","26.png",
+    ];
+
+    function startPage() {
+      let current = localStorage.getItem("visitorCount");
+      if (!current) {
+        current = 999;
+      } else {
+        current = parseInt(current);
+      }
+
+      // Si c’est le dernier utilisateur, redirection
+      if (current === 1) {
+        window.location.href = "final.html";
+        return;
+      }
+
+      // Affiche le numéro
+      document.getElementById("visitorNumber").textContent = current;
+
+      // Image persistante (ne change pas au rechargement)
+      let savedImage = sessionStorage.getItem("chosenImage");
+
+      if (!savedImage) {
+        savedImage = imageList[Math.floor(Math.random() * imageList.length)];
+        sessionStorage.setItem("chosenImage", savedImage);
+      }
+
+      document.getElementById("randomImage").src = savedImage;
+    }
+
+    function resetPage() {
+      let current = localStorage.getItem("visitorCount");
+      if (!current) {
+        current = 999;
+      } else {
+        current = parseInt(current);
+      }
+
+      current -= 1;
+      localStorage.setItem("visitorCount", current);
+
+      document.getElementById("visitorNumber").textContent = current;
+
+      // Préparer une nouvelle image aléatoire pour le prochain utilisateur
+      const newImage = imageList[Math.floor(Math.random() * imageList.length)];
+      sessionStorage.setItem("chosenImage", newImage);
+
+      // Redirection vers q1.html
+      window.location.href = "q1.html";
+    }
+  </script>
+</body>
+</html>
